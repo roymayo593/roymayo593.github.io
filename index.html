@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soumyadeep Roy</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --black: #0a0a0a;
+    --white: #f5f4f0;
+    --gray: #888;
+    --light: #e8e6e1;
+    --accent: #0a0a0a;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--white);
+    color: var(--black);
+    font-family: 'DM Mono', monospace;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom cursor */
+  .cursor {
+    width: 8px; height: 8px;
+    background: var(--black);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s, width 0.2s, height 0.2s;
+  }
+  .cursor-ring {
+    width: 36px; height: 36px;
+    border: 1px solid var(--black);
+    border-radius: 50%;
+    position: fixed;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease-out, width 0.3s, height 0.3s, opacity 0.3s;
+    opacity: 0.4;
+  }
+  body:hover .cursor { opacity: 1; }
+
+  /* Nav */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 28px 48px;
+    mix-blend-mode: multiply;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.05em;
+    text-decoration: none;
+    color: var(--black);
+  }
+  .nav-links { display: flex; gap: 36px; list-style: none; }
+  .nav-links a {
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--black);
+    opacity: 0.5;
+    transition: opacity 0.2s;
+  }
+  .nav-links a:hover { opacity: 1; }
+
+  /* Hero */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 48px 72px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-index {
+    position: absolute;
+    top: 48px; right: 48px;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    opacity: 0.3;
+    writing-mode: vertical-rl;
+  }
+  .hero-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(4rem, 12vw, 10rem);
+    font-weight: 300;
+    line-height: 0.9;
+    letter-spacing: -0.02em;
+    opacity: 0;
+    transform: translateY(40px);
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.3s forwards;
+  }
+  .hero-name em {
+    font-style: italic;
+    font-weight: 300;
+  }
+  .hero-sub {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-top: 32px;
+    opacity: 0;
+    animation: fadeUp 1s cubic-bezier(0.16, 1, 0.3, 1) 0.6s forwards;
+  }
+  .hero-desc {
+    font-size: 0.7rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.5;
+    max-width: 320px;
+    line-height: 1.8;
+  }
+  .hero-contact {
+    text-align: right;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    opacity: 0.4;
+    line-height: 2;
+  }
+  .hero-contact a { color: var(--black); text-decoration: none; transition: opacity 0.2s; }
+  .hero-contact a:hover { opacity: 1; }
+  .hero-line {
+    position: absolute;
+    bottom: 0; left: 48px; right: 48px;
+    height: 1px;
+    background: var(--black);
+    opacity: 0.1;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: scaleIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.9s forwards;
+  }
+
+  /* Sections */
+  section { padding: 96px 48px; }
+  .section-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0.35;
+    margin-bottom: 64px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+  }
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--black);
+    opacity: 0.15;
+  }
+
+  /* About */
+  #about { background: var(--black); color: var(--white); }
+  #about .section-label { color: var(--white); opacity: 0.3; }
+  #about .section-label::after { background: var(--white); }
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 96px;
+    align-items: start;
+  }
+  .about-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    font-weight: 300;
+    line-height: 1.5;
+    letter-spacing: 0.01em;
+  }
+  .about-text em { font-style: italic; }
+  .about-details { padding-top: 8px; }
+  .about-detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+  }
+  .about-detail-row span:first-child { opacity: 0.35; text-transform: uppercase; }
+  .about-detail-row span:last-child { opacity: 0.75; }
+
+  /* Experience */
+  #experience { background: var(--white); }
+  .exp-item {
+    display: grid;
+    grid-template-columns: 200px 1fr 180px;
+    gap: 48px;
+    padding: 40px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .exp-item.visible { opacity: 1; transform: translateY(0); }
+  .exp-date {
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    opacity: 0.35;
+    padding-top: 4px;
+    text-transform: uppercase;
+  }
+  .exp-role {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.6rem;
+    font-weight: 300;
+    margin-bottom: 6px;
+    line-height: 1.1;
+  }
+  .exp-company {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-bottom: 16px;
+  }
+  .exp-bullets { list-style: none; }
+  .exp-bullets li {
+    font-size: 0.7rem;
+    line-height: 1.8;
+    opacity: 0.6;
+    padding-left: 14px;
+    position: relative;
+    margin-bottom: 4px;
+  }
+  .exp-bullets li::before {
+    content: '·';
+    position: absolute;
+    left: 0;
+    opacity: 0.5;
+  }
+  .exp-tag {
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.25;
+    text-align: right;
+    padding-top: 4px;
+  }
+
+  /* Projects */
+  #projects { background: var(--light); }
+  .project-card {
+    background: var(--white);
+    padding: 48px;
+    margin-bottom: 2px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 48px;
+    align-items: start;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s, background 0.3s;
+    cursor: none;
+  }
+  .project-card.visible { opacity: 1; transform: translateY(0); }
+  .project-card:hover { background: var(--black); color: var(--white); }
+  .project-num {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    opacity: 0.3;
+    margin-bottom: 16px;
+  }
+  .project-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.2rem;
+    font-weight: 300;
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  .project-desc {
+    font-size: 0.68rem;
+    line-height: 1.9;
+    opacity: 0.55;
+    max-width: 560px;
+  }
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+  .tag {
+    font-size: 0.58rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 5px 12px;
+    border: 1px solid currentColor;
+    opacity: 0.35;
+  }
+  .project-link {
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: inherit;
+    opacity: 0.4;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+    margin-top: 4px;
+  }
+  .project-link:hover { opacity: 1; }
+  .project-link::after { content: '↗'; }
+
+  /* Skills */
+  #skills { background: var(--white); }
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 2px;
+  }
+  .skill-block {
+    background: var(--light);
+    padding: 32px 24px;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s, transform 0.5s, background 0.3s;
+  }
+  .skill-block.visible { opacity: 1; transform: translateY(0); }
+  .skill-block:hover { background: var(--black); color: var(--white); }
+  .skill-category {
+    font-size: 0.58rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    opacity: 0.35;
+    margin-bottom: 16px;
+  }
+  .skill-items {
+    list-style: none;
+    font-size: 0.68rem;
+    line-height: 2;
+    opacity: 0.7;
+  }
+
+  /* Education */
+  #education { background: var(--black); color: var(--white); }
+  #education .section-label { color: var(--white); opacity: 0.3; }
+  #education .section-label::after { background: var(--white); }
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2px; }
+  .edu-card {
+    background: rgba(255,255,255,0.04);
+    padding: 48px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s, transform 0.6s;
+  }
+  .edu-card.visible { opacity: 1; transform: translateY(0); }
+  .edu-degree {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.8rem;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+  .edu-school {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.4;
+    margin-bottom: 24px;
+  }
+  .edu-meta {
+    font-size: 0.65rem;
+    opacity: 0.35;
+    line-height: 2;
+  }
+
+  /* Certifications */
+  #certifications { background: var(--white); }
+  .cert-list { display: flex; flex-direction: column; gap: 2px; }
+  .cert-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 0;
+    border-bottom: 1px solid rgba(0,0,0,0.07);
+    opacity: 0;
+    transform: translateX(-20px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+  .cert-item.visible { opacity: 1; transform: translateX(0); }
+  .cert-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.3rem;
+    font-weight: 300;
+  }
+  .cert-meta { font-size: 0.62rem; letter-spacing: 0.1em; opacity: 0.35; text-transform: uppercase; }
+
+  /* Footer */
+  footer {
+    background: var(--black);
+    color: var(--white);
+    padding: 96px 48px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+  .footer-name {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 300;
+    line-height: 1;
+    opacity: 0.12;
+  }
+  .footer-links { display: flex; flex-direction: column; gap: 12px; text-align: right; }
+  .footer-links a {
+    font-size: 0.62rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--white);
+    opacity: 0.35;
+    transition: opacity 0.2s;
+  }
+  .footer-links a:hover { opacity: 1; }
+
+  /* Animations */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scaleIn {
+    to { transform: scaleX(1); }
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar { width: 3px; }
+  ::-webkit-scrollbar-track { background: var(--white); }
+  ::-webkit-scrollbar-thumb { background: var(--black); opacity: 0.3; }
+
+  @media (max-width: 768px) {
+    nav { padding: 20px 24px; }
+    .nav-links { display: none; }
+    #hero { padding: 0 24px 48px; }
+    section { padding: 64px 24px; }
+    .about-grid, .edu-grid { grid-template-columns: 1fr; gap: 48px; }
+    .exp-item { grid-template-columns: 1fr; gap: 12px; }
+    .exp-tag { text-align: left; }
+    .skills-grid { grid-template-columns: repeat(2, 1fr); }
+    .project-card { grid-template-columns: 1fr; padding: 32px 24px; }
+    footer { flex-direction: column; gap: 48px; align-items: flex-start; }
+    .footer-links { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<nav>
+  <a href="#hero" class="nav-logo">SR</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-index">Portfolio — 2025</div>
+  <h1 class="hero-name">Soumyadeep<br><em>Roy</em></h1>
+  <div class="hero-sub">
+    <p class="hero-desc">MSc Computer Science · Software Engineer · Cloud & ML</p>
+    <div class="hero-contact">
+      <a href="mailto:roymayo593@gmail.com">roymayo593@gmail.com</a><br>
+      <a href="https://linkedin.com/in/soumyadeep-roy" target="_blank">linkedin.com/in/soumyadeep-roy</a><br>
+      <a href="https://github.com/roymayo593" target="_blank">github.com/roymayo593</a>
+    </div>
+  </div>
+  <div class="hero-line"></div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-label">01 — About</div>
+  <div class="about-grid">
+    <p class="about-text">
+      A software engineer who builds things that <em>matter</em> — from automated recruitment pipelines to disease-spread prediction models. Currently based in Siliguri, India, with experience across the UK and India.
+    </p>
+    <div class="about-details">
+      <div class="about-detail-row">
+        <span>Location</span>
+        <span>Siliguri, West Bengal, India</span>
+      </div>
+      <div class="about-detail-row">
+        <span>Education</span>
+        <span>MSc CS — University of Leeds</span>
+      </div>
+      <div class="about-detail-row">
+        <span>Focus</span>
+        <span>Cloud, ML, Software Engineering</span>
+      </div>
+      <div class="about-detail-row">
+        <span>Languages</span>
+        <span>Python, PHP, English, Hindi, Bengali</span>
+      </div>
+      <div class="about-detail-row">
+        <span>Availability</span>
+        <span>Open to opportunities</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section id="experience">
+  <div class="section-label">02 — Experience</div>
+
+  <div class="exp-item">
+    <div class="exp-date">Jun 2024 – Jul 2025</div>
+    <div>
+      <div class="exp-role">Sales Advisor</div>
+      <div class="exp-company">Sky UK — Leeds, England</div>
+      <ul class="exp-bullets">
+        <li>Provided technical support, account management, and service optimisation ensuring seamless customer experiences.</li>
+        <li>Resolved complex service inquiries and built lasting client relationships through consultative communication.</li>
+      </ul>
+    </div>
+    <div class="exp-tag">Customer Success</div>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-date">Aug 2023</div>
+    <div>
+      <div class="exp-role">Event Assistant</div>
+      <div class="exp-company">Leeds University Union — Leeds, England</div>
+      <ul class="exp-bullets">
+        <li>Delivered customer service at Leeds Festival, resolving ticketing issues and collaborating with vendors.</li>
+        <li>Executed community programs for young adults and adapted to high-pressure challenges.</li>
+      </ul>
+    </div>
+    <div class="exp-tag">Event Management</div>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-date">May – Aug 2022</div>
+    <div>
+      <div class="exp-role">Cloud Computing Intern</div>
+      <div class="exp-company">Kritter Software Technology — Bengaluru, India</div>
+      <ul class="exp-bullets">
+        <li>Built scalable storage solutions with Amazon S3 and serverless pipelines using AWS Lambda.</li>
+        <li>Optimised cloud service interactions, gaining hands-on expertise in AWS architecture.</li>
+      </ul>
+    </div>
+    <div class="exp-tag">Cloud / AWS</div>
+  </div>
+
+  <div class="exp-item">
+    <div class="exp-date">Dec 2019 – Jan 2020</div>
+    <div>
+      <div class="exp-role">Software Engineer Intern</div>
+      <div class="exp-company">Workex — Bengaluru, India</div>
+      <ul class="exp-bullets">
+        <li>Co-developed chatbot workflow configurations enabling automated candidate screening across 15+ decision nodes.</li>
+        <li>Built routing logic evaluating candidates on education, language fluency, experience and salary.</li>
+        <li>Integrated SMS/email triggers to automate interview scheduling; refactored Python backend for reliability.</li>
+        <li>Debugged and enhanced the payment module of a food delivery app for the Indian market.</li>
+      </ul>
+    </div>
+    <div class="exp-tag">Python / Bot Dev</div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section id="projects">
+  <div class="section-label">03 — Projects</div>
+
+  <div class="project-card">
+    <div>
+      <div class="project-num">001</div>
+      <div class="project-title">DengAI — Disease Spread Prediction</div>
+      <p class="project-desc">
+        MSc dissertation project applying machine learning and data analysis to predict the spread of Dengue Virus across two cities in South America. Built a regression model using Python, Pandas, and Scikit-learn, trained on historical epidemiological and climate data.
+      </p>
+      <div class="project-tags">
+        <span class="tag">Python</span>
+        <span class="tag">Machine Learning</span>
+        <span class="tag">Regression</span>
+        <span class="tag">Jupyter</span>
+        <span class="tag">Data Analysis</span>
+      </div>
+    </div>
+    <a href="https://github.com/roymayo593/DengAI-MSc-Project" target="_blank" class="project-link">View on GitHub</a>
+  </div>
+
+  <div class="project-card">
+    <div>
+      <div class="project-num">002</div>
+      <div class="project-title">Recruitment Chatbot Workflow</div>
+      <p class="project-desc">
+        Collaborated on designing and implementing a conversational chatbot system for a job recruitment platform at Workex. The bot automated candidate screening through 15+ conditional decision nodes, evaluating education, language fluency, experience, and salary expectations — with automated SMS and email scheduling.
+      </p>
+      <div class="project-tags">
+        <span class="tag">Python</span>
+        <span class="tag">Chatbot Design</span>
+        <span class="tag">JSON Workflow</span>
+        <span class="tag">Automation</span>
+      </div>
+    </div>
+    <div></div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <div class="section-label">04 — Skills</div>
+  <div class="skills-grid">
+    <div class="skill-block">
+      <div class="skill-category">Programming</div>
+      <ul class="skill-items">
+        <li>Python</li>
+        <li>PHP</li>
+      </ul>
+    </div>
+    <div class="skill-block">
+      <div class="skill-category">Cloud</div>
+      <ul class="skill-items">
+        <li>AWS S3</li>
+        <li>AWS Lambda</li>
+        <li>Microsoft Azure</li>
+      </ul>
+    </div>
+    <div class="skill-block">
+      <div class="skill-category">Data & ML</div>
+      <ul class="skill-items">
+        <li>Machine Learning</li>
+        <li>Data Analysis</li>
+        <li>Jupyter</li>
+        <li>Scikit-learn</li>
+      </ul>
+    </div>
+    <div class="skill-block">
+      <div class="skill-category">Customer & Sales</div>
+      <ul class="skill-items">
+        <li>Customer Service</li>
+        <li>Account Mgmt</li>
+        <li>CRM</li>
+        <li>Sales</li>
+      </ul>
+    </div>
+    <div class="skill-block">
+      <div class="skill-category">Other</div>
+      <ul class="skill-items">
+        <li>Project Mgmt</li>
+        <li>Event Mgmt</li>
+        <li>Chatbot Design</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section id="education">
+  <div class="section-label">05 — Education</div>
+  <div class="edu-grid">
+    <div class="edu-card">
+      <div class="edu-degree">Master of Science<br>Computer Science</div>
+      <div class="edu-school">University of Leeds</div>
+      <div class="edu-meta">
+        Sep 2022 – Sep 2023<br>
+        GPA: Merit<br>
+        Dissertation: DengAI — Predicting Disease Spread
+      </div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-degree">Bachelor of Technology<br>Computer Science</div>
+      <div class="edu-school">SRM Institute of Science & Technology, Chennai</div>
+      <div class="edu-meta">
+        Jan 2017 – Jan 2021<br>
+        GPA: 76%
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CERTIFICATIONS -->
+<section id="certifications">
+  <div class="section-label">06 — Certifications</div>
+  <div class="cert-list">
+    <div class="cert-item">
+      <span class="cert-name">Building Web Applications in PHP</span>
+      <span class="cert-meta">Coursera · Apr 2020</span>
+    </div>
+    <div class="cert-item">
+      <span class="cert-name">Machine Learning</span>
+      <span class="cert-meta">Coursera · Oct 2019</span>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-name">Soumyadeep<br>Roy</div>
+  <div class="footer-links">
+    <a href="mailto:roymayo593@gmail.com">roymayo593@gmail.com</a>
+    <a href="https://linkedin.com/in/soumyadeep-roy" target="_blank">LinkedIn</a>
+    <a href="https://github.com/roymayo593" target="_blank">GitHub</a>
+    <a href="#hero">Back to top ↑</a>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+
+  function animateRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animateRing);
+  }
+  animateRing();
+
+  document.querySelectorAll('a, button').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.width = '16px';
+      cursor.style.height = '16px';
+      ring.style.width = '56px';
+      ring.style.height = '56px';
+      ring.style.opacity = '0.15';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.width = '8px';
+      cursor.style.height = '8px';
+      ring.style.width = '36px';
+      ring.style.height = '36px';
+      ring.style.opacity = '0.4';
+    });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.exp-item, .project-card, .skill-block, .edu-card, .cert-item').forEach(el => {
+    observer.observe(el);
+  });
+</script>
+</body>
+</html>
