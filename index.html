@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Soumyadeep Roy — Data Analyst · Data Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0f0e0d;
+    --paper: #f5f2ed;
+    --accent: #c8410a;
+    --accent2: #1a4a6b;
+    --muted: #8a8379;
+    --line: rgba(15,14,13,0.12);
+    --card: #edeae4;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.5;
+  }
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 3rem;
+    background: rgba(245,242,237,0.9);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; color: var(--ink); text-decoration: none; }
+  .nav-links { display: flex; gap: 2rem; list-style: none; }
+  .nav-links a { font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+  .nav-links a:hover { color: var(--accent); }
+
+  .hero { min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr; padding-top: 5rem; overflow: hidden; }
+  .hero-left { display: flex; flex-direction: column; justify-content: center; padding: 5rem 3rem 5rem 4rem; }
+  .hero-eyebrow { font-family: 'DM Mono', monospace; font-size: 0.7rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+  .hero-eyebrow::before { content: ''; display: inline-block; width: 2rem; height: 1px; background: var(--accent); }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(3.5rem, 7vw, 6rem); font-weight: 700; line-height: 1; letter-spacing: -0.03em; margin-bottom: 0.2rem; }
+  h1 .last { font-style: italic; color: var(--accent); }
+  .hero-tagline { font-size: 1rem; color: var(--muted); font-weight: 300; margin: 1.5rem 0 2.5rem; max-width: 380px; line-height: 1.6; }
+  .hero-cta { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.75rem; font-family: 'DM Mono', monospace; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; text-decoration: none; border: 1.5px solid var(--ink); color: var(--ink); transition: all 0.25s; cursor: pointer; background: transparent; }
+  .btn:hover { background: var(--ink); color: var(--paper); }
+  .btn-accent { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-accent:hover { background: #a33408; border-color: #a33408; color: #fff; }
+  .hero-right { display: flex; align-items: center; justify-content: center; }
+  .hero-card { background: var(--card); border: 1px solid var(--line); padding: 2.5rem; width: 340px; position: relative; animation: float 6s ease-in-out infinite; }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  .hero-card::before { content: ''; position: absolute; inset: -1px; border: 1px solid var(--accent); transform: translate(8px, 8px); z-index: -1; }
+  .card-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+  .card-value { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--ink); margin-bottom: 1.2rem; }
+  .card-stat { display: flex; align-items: baseline; gap: 0.4rem; margin-bottom: 1.2rem; }
+  .stat-number { font-family: 'Playfair Display', serif; font-size: 2.2rem; font-weight: 700; color: var(--accent); line-height: 1; }
+  .stat-label { font-size: 0.78rem; color: var(--muted); }
+  .badge-row { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 1.2rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+  .badge { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.06em; padding: 0.3rem 0.65rem; background: var(--paper); border: 1px solid var(--line); color: var(--muted); }
+  .badge.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+  .marquee-wrap { overflow: hidden; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0.9rem 0; background: var(--ink); }
+  .marquee-track { display: flex; gap: 3rem; animation: marquee 28s linear infinite; white-space: nowrap; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .marquee-item { font-family: 'Playfair Display', serif; font-size: 1rem; font-style: italic; color: var(--paper); opacity: 0.6; flex-shrink: 0; }
+  .marquee-item span { color: var(--accent); opacity: 1; margin: 0 1rem; font-style: normal; font-size: 0.7rem; }
+
+  section { padding: 6rem 4rem; max-width: 1200px; margin: 0 auto; }
+  .section-header { display: flex; align-items: baseline; gap: 1.5rem; margin-bottom: 4rem; border-bottom: 1px solid var(--line); padding-bottom: 1.5rem; }
+  .section-number { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--accent); letter-spacing: 0.1em; }
+  h2 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+  h2 em { font-style: italic; color: var(--accent); }
+
+  .about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: 5rem; align-items: start; }
+  .about-text p { color: #3d3a35; margin-bottom: 1.2rem; font-size: 1.02rem; line-height: 1.75; }
+  .info-row { display: flex; flex-direction: column; padding: 1rem 0; border-bottom: 1px solid var(--line); }
+  .info-row:first-child { border-top: 1px solid var(--line); }
+  .info-label { font-family: 'DM Mono', monospace; font-size: 0.65rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.3rem; }
+  .info-val { font-size: 0.92rem; font-weight: 500; }
+
+  .exp-list { display: flex; flex-direction: column; }
+  .exp-item { display: grid; grid-template-columns: 180px 1fr; gap: 3rem; padding: 2.5rem 0; border-bottom: 1px solid var(--line); }
+  .exp-item:first-child { border-top: 1px solid var(--line); }
+  .exp-meta { padding-top: 0.2rem; }
+  .exp-period { font-family: 'DM Mono', monospace; font-size: 0.68rem; color: var(--muted); letter-spacing: 0.05em; margin-bottom: 0.6rem; }
+  .exp-tag { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.08em; padding: 0.25rem 0.6rem; background: var(--card); border: 1px solid var(--line); color: var(--accent2); }
+  .exp-role { font-family: 'Playfair Display', serif; font-size: 1.4rem; font-weight: 700; margin-bottom: 0.25rem; line-height: 1.2; }
+  .exp-company { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.2rem; }
+  .exp-bullets { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .exp-bullets li { font-size: 0.9rem; color: #3d3a35; padding-left: 1rem; position: relative; line-height: 1.6; }
+  .exp-bullets li::before { content: '—'; position: absolute; left: 0; color: var(--accent); font-size: 0.8rem; }
+
+  .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+  .project-card { background: var(--card); border: 1px solid var(--line); padding: 2rem; position: relative; transition: transform 0.25s, box-shadow 0.25s; display: flex; flex-direction: column; }
+  .project-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(15,14,13,0.1); }
+  .project-num { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 700; color: var(--line); line-height: 1; margin-bottom: 1rem; border-bottom: 1px solid var(--line); padding-bottom: 1rem; }
+  .project-category { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); margin-bottom: 0.6rem; }
+  .project-title { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; line-height: 1.2; margin-bottom: 0.8rem; }
+  .project-desc { font-size: 0.88rem; color: #3d3a35; line-height: 1.65; margin-bottom: 1.5rem; flex: 1; }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
+  .tag { font-family: 'DM Mono', monospace; font-size: 0.6rem; letter-spacing: 0.06em; padding: 0.25rem 0.6rem; background: var(--paper); border: 1px solid var(--line); color: var(--muted); }
+  .project-link { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 0.4rem; border-bottom: 1px solid var(--accent); padding-bottom: 0.1rem; width: fit-content; transition: opacity 0.2s; }
+  .project-link:hover { opacity: 0.7; }
+
+  .skills-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .skill-group { padding: 1.8rem; background: var(--card); border: 1px solid var(--line); }
+  .skill-group-title { font-family: 'DM Mono', monospace; font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.2rem; padding-bottom: 0.8rem; border-bottom: 1px solid var(--line); }
+  .skill-list { list-style: none; display: flex; flex-direction: column; gap: 0.5rem; }
+  .skill-list li { font-size: 0.88rem; color: #3d3a35; padding-left: 0.8rem; position: relative; }
+  .skill-list li::before { content: '·'; position: absolute; left: 0; color: var(--accent); font-size: 1rem; line-height: 1.4; }
+
+  .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .edu-card { border: 1px solid var(--line); padding: 2rem; position: relative; background: var(--card); }
+  .edu-card::after { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--accent); }
+  .edu-degree { font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .edu-field { font-size: 0.9rem; color: var(--muted); margin-bottom: 0.8rem; }
+  .edu-institution { font-family: 'DM Mono', monospace; font-size: 0.72rem; color: var(--accent2); letter-spacing: 0.05em; margin-bottom: 0.4rem; }
+  .edu-period { font-size: 0.8rem; color: var(--muted); margin-bottom: 0.8rem; }
+  .edu-detail { font-size: 0.85rem; color: #3d3a35; line-height: 1.6; }
+
+  .certs-list { display: flex; flex-direction: column; }
+  .cert-item { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2rem; padding: 1.4rem 0; border-bottom: 1px solid var(--line); }
+  .cert-item:first-child { border-top: 1px solid var(--line); }
+  .cert-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .cert-issuer { font-size: 0.82rem; color: var(--muted); }
+  .cert-date { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.05em; white-space: nowrap; }
+  .cert-score { display: inline-block; font-family: 'DM Mono', monospace; font-size: 0.62rem; padding: 0.2rem 0.55rem; background: var(--accent); color: #fff; margin-left: 0.5rem; vertical-align: middle; }
+
+  .contact-section { background: var(--ink); color: var(--paper); padding: 6rem 4rem; }
+  .contact-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+  .contact-heading { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 700; letter-spacing: -0.03em; line-height: 1.05; }
+  .contact-heading em { font-style: italic; color: var(--accent); }
+  .contact-sub { font-size: 0.95rem; color: rgba(245,242,237,0.5); margin-top: 1.2rem; line-height: 1.7; max-width: 380px; }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link { display: flex; align-items: center; gap: 1.2rem; padding: 1.2rem 1.5rem; border: 1px solid rgba(245,242,237,0.15); text-decoration: none; color: var(--paper); transition: border-color 0.2s, background 0.2s; }
+  .contact-link:hover { border-color: var(--accent); background: rgba(200,65,10,0.08); }
+  .contact-link-icon { font-size: 1.2rem; width: 2rem; text-align: center; flex-shrink: 0; }
+  .contact-link-text { display: flex; flex-direction: column; }
+  .contact-link-label { font-family: 'DM Mono', monospace; font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: rgba(245,242,237,0.4); margin-bottom: 0.15rem; }
+  .contact-link-val { font-size: 0.92rem; }
+
+  footer { background: var(--ink); border-top: 1px solid rgba(245,242,237,0.08); padding: 1.5rem 4rem; display: flex; align-items: center; justify-content: space-between; }
+  footer span { font-family: 'DM Mono', monospace; font-size: 0.65rem; color: rgba(245,242,237,0.3); letter-spacing: 0.06em; }
+
+  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<nav>
+  <a class="nav-logo" href="#">SR</a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#experience">Experience</a></li>
+    <li><a href="#projects">Projects</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#education">Education</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<div class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Portfolio — 2026</div>
+    <h1>Soumyadeep<br><span class="last">Roy</span></h1>
+    <p class="hero-tagline">Data Analyst · Data Engineer · MSc Computer Science (Merit), University of Leeds. Building insight from data — from end-to-end ML pipelines to cloud-based ETL workflows.</p>
+    <div class="hero-cta">
+      <a href="#contact" class="btn btn-accent">Get in touch</a>
+      <a href="#projects" class="btn">View projects</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-card">
+      <div class="card-label">Location</div>
+      <div class="card-value">Siliguri, West Bengal</div>
+      <div class="card-label">Availability</div>
+      <div class="card-value">15 days or less</div>
+      <div class="card-stat">
+        <span class="stat-number">95%</span>
+        <span class="stat-label">NPTEL Score — IIT Roorkee</span>
+      </div>
+      <div class="badge-row">
+        <span class="badge active">Open to relocate</span>
+        <span class="badge">Data · ML</span>
+        <span class="badge">Cloud</span>
+        <span class="badge">BFSI</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <span class="marquee-item">Python <span>✦</span></span>
+    <span class="marquee-item">SQL <span>✦</span></span>
+    <span class="marquee-item">Machine Learning <span>✦</span></span>
+    <span class="marquee-item">AWS <span>✦</span></span>
+    <span class="marquee-item">ETL Pipelines <span>✦</span></span>
+    <span class="marquee-item">Data Engineering <span>✦</span></span>
+    <span class="marquee-item">Predictive Modelling <span>✦</span></span>
+    <span class="marquee-item">scikit-learn <span>✦</span></span>
+    <span class="marquee-item">PostgreSQL <span>✦</span></span>
+    <span class="marquee-item">Python <span>✦</span></span>
+    <span class="marquee-item">SQL <span>✦</span></span>
+    <span class="marquee-item">Machine Learning <span>✦</span></span>
+    <span class="marquee-item">AWS <span>✦</span></span>
+    <span class="marquee-item">ETL Pipelines <span>✦</span></span>
+    <span class="marquee-item">Data Engineering <span>✦</span></span>
+    <span class="marquee-item">Predictive Modelling <span>✦</span></span>
+    <span class="marquee-item">scikit-learn <span>✦</span></span>
+    <span class="marquee-item">PostgreSQL <span>✦</span></span>
+  </div>
+</div>
+
+<section id="about">
+  <div class="section-header fade-in">
+    <span class="section-number">01</span>
+    <h2>About <em>me</em></h2>
+  </div>
+  <div class="about-grid fade-in">
+    <div class="about-text">
+      <p>I'm a data analytics professional who enjoys turning messy, real-world datasets into clean, actionable insight. With an MSc (Merit) in Computer Science from the University of Leeds and a BTech from SRM, I've worked across the full data stack — from building ML models that predict dengue fever spread across South American cities, to building cloud-based ETL pipelines on AWS.</p>
+      <p>At Sky UK, I worked in a high-volume service environment where I analysed operational datasets and system logs to identify recurring technical failure patterns — translating investigative findings into process improvements used by cross-functional teams.</p>
+      <p>Now back in India and actively seeking entry-level roles as a Data Analyst, Business Analyst, or Data Engineer at MNCs, BFSI institutions, or consulting firms. I bring strong Python and SQL skills, hands-on cloud experience, and genuine curiosity for data-driven problems.</p>
+    </div>
+    <div class="about-sidebar">
+      <div class="info-row"><span class="info-label">Location</span><span class="info-val">Siliguri, West Bengal, India</span></div>
+      <div class="info-row"><span class="info-label">Open to Relocate</span><span class="info-val">Across India</span></div>
+      <div class="info-row"><span class="info-label">Focus Area</span><span class="info-val">Data · ML · Cloud</span></div>
+      <div class="info-row"><span class="info-label">Languages</span><span class="info-val">English · Hindi · Bengali</span></div>
+      <div class="info-row"><span class="info-label">Education</span><span class="info-val">MSc CS — University of Leeds (Merit)</span></div>
+      <div class="info-row"><span class="info-label">Contact</span><span class="info-val">+91 98322 05144</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="section-header fade-in">
+    <span class="section-number">02</span>
+    <h2><em>Work</em> Experience</h2>
+  </div>
+  <div class="exp-list">
+    <div class="exp-item fade-in">
+      <div class="exp-meta">
+        <div class="exp-period">Jun 2024 – Jul 2025</div>
+        <div class="exp-tag">Data · Operations</div>
+      </div>
+      <div>
+        <div class="exp-role">Sales Advisor — Technical Support &amp; Data Operations</div>
+        <div class="exp-company">Sky UK · Leeds, United Kingdom · Full-time</div>
+        <ul class="exp-bullets">
+          <li>Analysed customer service records and operational datasets to identify recurring technical issues and service disruption patterns, enabling proactive resolution strategies</li>
+          <li>Investigated system logs and backend service records to determine root causes of technical incidents, supporting faster resolution times across service teams</li>
+          <li>Maintained structured documentation of analytical findings within internal CRM and reporting systems, ensuring data accuracy and auditability</li>
+          <li>Conducted requirement analysis by gathering and interpreting customer-reported technical data for cross-functional resolution teams</li>
+          <li>Communicated data-backed investigation updates to technical and operations teams, contributing to process improvement initiatives</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item fade-in">
+      <div class="exp-meta">
+        <div class="exp-period">May – Aug 2022</div>
+        <div class="exp-tag">Cloud · AWS</div>
+      </div>
+      <div>
+        <div class="exp-role">Cloud &amp; Data Engineering Intern</div>
+        <div class="exp-company">Kritter Software Technology · Bengaluru, Karnataka · Internship</div>
+        <ul class="exp-bullets">
+          <li>Assisted development of cloud-based data workflows and automated ETL pipelines using AWS S3 and AWS Lambda</li>
+          <li>Performed data validation, cleaning, and transformation of structured datasets used in backend data processing</li>
+          <li>Supported monitoring and debugging of automated data pipelines, ensuring data integrity and reliability across production systems</li>
+          <li>Identified and documented data inconsistencies within backend systems, contributing to improved data quality and pipeline performance</li>
+        </ul>
+      </div>
+    </div>
+    <div class="exp-item fade-in">
+      <div class="exp-meta">
+        <div class="exp-period">Dec 2019 – Jan 2020</div>
+        <div class="exp-tag">Python · Backend</div>
+      </div>
+      <div>
+        <div class="exp-role">Backend Developer Intern</div>
+        <div class="exp-company">Workex · Bengaluru, Karnataka · Internship</div>
+        <ul class="exp-bullets">
+          <li>Assisted backend development tasks using Python, supporting application module development and debugging</li>
+          <li>Contributed to unit testing, QA validation, and bug reporting for software components</li>
+          <li>Maintained version-controlled codebase using Git and documented technical observations for senior developers</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="section-header fade-in">
+    <span class="section-number">03</span>
+    <h2>Selected <em>Projects</em></h2>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card fade-in">
+      <div class="project-num">001</div>
+      <div class="project-category">MSc Research · University of Leeds</div>
+      <div class="project-title">DengAI — Dengue Spread Prediction</div>
+      <p class="project-desc">End-to-end ML research project predicting dengue fever spread across San Juan and Iquitos using epidemiological and environmental time-series data. Benchmarked against the DrivenData competition dataset. Evaluated Random Forest and Gradient Boosting models against regression baselines for weekly case count prediction.</p>
+      <div class="project-tags">
+        <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">scikit-learn</span><span class="tag">Random Forest</span><span class="tag">Gradient Boosting</span><span class="tag">Matplotlib</span><span class="tag">Seaborn</span>
+      </div>
+      <a href="https://github.com/roymayo593" target="_blank" class="project-link">View on GitHub ↗</a>
+    </div>
+    <div class="project-card fade-in">
+      <div class="project-num">002</div>
+      <div class="project-category">Independent Project</div>
+      <div class="project-title">Credit Card Fraud Detection System</div>
+      <p class="project-desc">Full-pipeline data science project detecting fraudulent financial transactions on real-world imbalanced datasets. Applied SMOTE and undersampling to handle class imbalance. Built and compared Logistic Regression and Random Forest classifiers, achieving strong precision-recall performance. Documented end-to-end pipeline from data ingestion to model evaluation.</p>
+      <div class="project-tags">
+        <span class="tag">Python</span><span class="tag">Pandas</span><span class="tag">scikit-learn</span><span class="tag">SMOTE</span><span class="tag">Logistic Regression</span><span class="tag">Matplotlib</span><span class="tag">Seaborn</span>
+      </div>
+    </div>
+    <div class="project-card fade-in">
+      <div class="project-num">003</div>
+      <div class="project-category">Internship Project · Workex</div>
+      <div class="project-title">Recruitment Chatbot Workflow</div>
+      <p class="project-desc">Collaborated on designing and implementing a conversational chatbot system for a job recruitment platform at Workex. The bot automated candidate screening through 15+ conditional decision nodes, evaluating education, language fluency, experience, and salary expectations — with automated SMS and email scheduling upon qualification.</p>
+      <div class="project-tags">
+        <span class="tag">Python</span><span class="tag">Chatbot Design</span><span class="tag">JSON Workflow</span><span class="tag">Automation</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="section-header fade-in">
+    <span class="section-number">04</span>
+    <h2>Skills &amp; <em>Tools</em></h2>
+  </div>
+  <div class="skills-grid fade-in">
+    <div class="skill-group">
+      <div class="skill-group-title">Languages</div>
+      <ul class="skill-list">
+        <li>Python (Pandas, NumPy, scikit-learn)</li>
+        <li>SQL</li>
+        <li>C++</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Data &amp; Analytics</div>
+      <ul class="skill-list">
+        <li>Exploratory Data Analysis</li>
+        <li>Data Cleaning &amp; Feature Engineering</li>
+        <li>Statistical &amp; Predictive Modelling</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Machine Learning</div>
+      <ul class="skill-list">
+        <li>Classification &amp; Regression</li>
+        <li>Random Forest, Gradient Boosting</li>
+        <li>Class Imbalance Handling (SMOTE)</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Databases</div>
+      <ul class="skill-list">
+        <li>MySQL</li>
+        <li>PostgreSQL</li>
+        <li>Microsoft Excel (Advanced)</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Cloud &amp; DevOps</div>
+      <ul class="skill-list">
+        <li>AWS S3</li>
+        <li>AWS Lambda</li>
+        <li>Git &amp; GitHub</li>
+      </ul>
+    </div>
+    <div class="skill-group">
+      <div class="skill-group-title">Visualisation</div>
+      <ul class="skill-list">
+        <li>Matplotlib</li>
+        <li>Seaborn</li>
+        <li>Python data visualisation libraries</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="education">
+  <div class="section-header fade-in">
+    <span class="section-number">05</span>
+    <h2><em>Education</em></h2>
+  </div>
+  <div class="edu-grid fade-in">
+    <div class="edu-card">
+      <div class="edu-degree">Master of Science</div>
+      <div class="edu-field">Computer Science</div>
+      <div class="edu-institution">University of Leeds, United Kingdom</div>
+      <div class="edu-period">Sep 2022 – Sep 2023 · Merit</div>
+      <div class="edu-detail">Relevant modules: Machine Learning, Data Mining, Cloud Computing, Software Engineering. Research focus: Epidemiological data analysis and predictive modelling using Python.</div>
+    </div>
+    <div class="edu-card">
+      <div class="edu-degree">Bachelor of Technology</div>
+      <div class="edu-field">Computer Science Engineering</div>
+      <div class="edu-institution">SRM Institute of Science &amp; Technology, Kattankulathur</div>
+      <div class="edu-period">Jan 2017 – Jan 2021 · 76%</div>
+      <div class="edu-detail">Core coursework: Data Structures, Algorithms, Database Systems, Object-Oriented Programming.</div>
+    </div>
+  </div>
+
+  <div style="margin-top: 4rem;">
+    <div class="section-header fade-in" style="margin-bottom: 2rem;">
+      <span class="section-number">06</span>
+      <h2><em>Certifications</em></h2>
+    </div>
+    <div class="certs-list fade-in">
+      <div class="cert-item">
+        <div>
+          <div class="cert-name">Data Analytics with Python <span class="cert-score">95%</span></div>
+          <div class="cert-issuer">NPTEL · IIT Roorkee (SWAYAM)</div>
+        </div>
+        <div class="cert-date">Jan – Apr 2020</div>
+      </div>
+      <div class="cert-item">
+        <div>
+          <div class="cert-name">Machine Learning</div>
+          <div class="cert-issuer">Stanford University · Coursera</div>
+        </div>
+        <div class="cert-date">Oct 2019</div>
+      </div>
+      <div class="cert-item">
+        <div>
+          <div class="cert-name">Building Web Applications in PHP</div>
+          <div class="cert-issuer">University of Michigan · Coursera</div>
+        </div>
+        <div class="cert-date">Apr 2020</div>
+      </div>
+      <div class="cert-item">
+        <div>
+          <div class="cert-name">Blockchain &amp; Decentralised AI Workshop</div>
+          <div class="cert-issuer">Microsoft Student Partners Club</div>
+        </div>
+        <div class="cert-date">Oct 2019</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div>
+      <h2 class="contact-heading">Let's work<br><em>together.</em></h2>
+      <p class="contact-sub">Open to Data Analyst, Business Analyst, and Data Engineer roles at MNCs, BFSI institutions, and consulting firms. Available within 15 days.</p>
+    </div>
+    <div class="contact-links">
+      <a href="mailto:roymayo593@gmail.com" class="contact-link">
+        <span class="contact-link-icon">✉</span>
+        <span class="contact-link-text">
+          <span class="contact-link-label">Email</span>
+          <span class="contact-link-val">roymayo593@gmail.com</span>
+        </span>
+      </a>
+      <a href="https://www.linkedin.com/in/soumyadeep-roy-/" target="_blank" class="contact-link">
+        <span class="contact-link-icon">in</span>
+        <span class="contact-link-text">
+          <span class="contact-link-label">LinkedIn</span>
+          <span class="contact-link-val">linkedin.com/in/soumyadeep-roy-/</span>
+        </span>
+      </a>
+      <a href="https://github.com/roymayo593" target="_blank" class="contact-link">
+        <span class="contact-link-icon">⌥</span>
+        <span class="contact-link-text">
+          <span class="contact-link-label">GitHub</span>
+          <span class="contact-link-val">github.com/roymayo593</span>
+        </span>
+      </a>
+      <a href="tel:+919832205144" class="contact-link">
+        <span class="contact-link-icon">☎</span>
+        <span class="contact-link-text">
+          <span class="contact-link-label">Phone</span>
+          <span class="contact-link-val">+91 98322 05144</span>
+        </span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <span>Soumyadeep Roy · Portfolio 2026</span>
+  <span>Data Analyst · Data Engineer · MSc CS, University of Leeds</span>
+</footer>
+
+<script>
+  document.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+</script>
+</body>
+</html>
